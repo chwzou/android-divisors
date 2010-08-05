@@ -28,6 +28,7 @@ public class BumpyActivity extends Activity {
 	private class DivisorTask extends AsyncTask<Void, Integer, Void> {
 
 		long startTime;
+		int count = 0;
 		
 		@Override
 		protected void onPreExecute() {
@@ -40,21 +41,22 @@ public class BumpyActivity extends Activity {
 				double s = Math.sqrt(i);
 				for (int j = 1; j <= s; j++) {
 					if (i%j==0)
-					publishProgress(i, j);
+						count++;
+//					publishProgress(i, j);
 				}
 			}
 			
 			return null;
 		}
 		
-		@Override
-		protected void onProgressUpdate(Integer... progress) {
-			Log.d("bumpy", "i: " + progress[0] + " j: " + progress[1]);
-		}
+//		@Override
+//		protected void onProgressUpdate(Integer... progress) {
+//			Log.d("bumpy", "i: " + progress[0] + " j: " + progress[1]);
+//		}
 		
 		@Override
 		protected void onPostExecute(Void result) {
-			Log.d("bumpy", "done!");
+			Log.d("bumpy", "count: " + count*2);
 			Log.d("bumpy", "time elapsed(ms): " + (System.currentTimeMillis() - startTime) );
 			
 		}
