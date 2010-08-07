@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.ListView;
@@ -13,20 +14,17 @@ import android.widget.TextView;
 
 public class NumberActivity extends Activity {
 	
-	TextView text;
-	ListView list;
-	
-	ProgressDialog progressDialog;
-	
 	public static final String LABEL_DIVISORS = " divisors";
 	public static final String LABEL_PRIME = "prime number";
 	public static final String KEY_NUMBER = "number";
 	public static final String KEY_DESCRIPTION = "description";
+	public static final String KEY_PREFS = "preferences";
 	
+	TextView text;
+	ListView list;
+	ProgressDialog progressDialog;
+	SharedPreferences prefs;
 	SimpleAdapter adapter;
-	
-//	int[] factors = new int[10000];
-	
 	ArrayList<HashMap<String, String>> divisors = new ArrayList<HashMap<String, String>>();
 	
 	/** Called when the activity is first created. */
@@ -41,7 +39,7 @@ public class NumberActivity extends Activity {
 		adapter = new SimpleAdapter(
 				this,
 				divisors,
-				android.R.layout.simple_list_item_2,
+				R.layout.number_list_item,
 				new String[] {KEY_NUMBER, KEY_DESCRIPTION},
 				new int[] {android.R.id.text1, android.R.id.text2});
 		
@@ -49,6 +47,8 @@ public class NumberActivity extends Activity {
 		
 	}
 	
+	
+	//Thread for creating list of numbers and number of divisors
 	private class DivisorTask extends AsyncTask<Void, Integer, Void> {
 
 		long startTime;
@@ -74,7 +74,14 @@ public class NumberActivity extends Activity {
 			
 			int time = 0;
 			
-			for (int n = 1; n <= 10000; n++) {
+			mMap = new HashMap<String , String>();
+			mMap.put(KEY_NUMBER, "1");
+			
+			mMap.put(KEY_DESCRIPTION, "special case");
+			
+			divisors.add(mMap);
+			
+			for (int n = 2; n <= 10000; n++) {
 				
 				fcount = 0;
 				
@@ -102,6 +109,8 @@ public class NumberActivity extends Activity {
 				}
 
 			}
+			
+			publishProgress(10000);
 			
 			return null;
 		}
