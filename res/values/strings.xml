@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, BumpyActivity!</string>
-    <string name="app_name">bumpy</string>
+    <string name="hello">Hello World, NumberActivity!</string>
+    <string name="app_name">Divisor</string>
 </resources>
