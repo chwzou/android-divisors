@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="hello">Hello World, NumberActivity!</string>
-    <string name="app_name">Divisor</string>
+    <string name="app_name">Divisors</string>
+    <string name="loading_title">generating divisors...</string>
 </resources>

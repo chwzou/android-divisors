@@ -13,13 +13,15 @@ public class ListNumberBinder implements SimpleAdapter.ViewBinder {
 			String textRepresentation) {
 		
 		if (view.getId() == android.R.id.text2) {
-			if (data.equals(NumberActivity.LABEL_PRIME)) {
-				((TextView)view).setTextColor(Color.rgb(0, 173, 32));
-			} else {
+			if (data == NumberActivity.LABEL_PRIME) {
 				((TextView)view).setTextColor(Color.WHITE);
+			} else if (data == NumberActivity.LABEL_SPECIAL) {
+				((TextView)view).setTextColor(Color.BLUE);
+			} else {
+				((TextView)view).setTextColor(Color.GREEN);
 			}
 		}
-		// TODO Auto-generated method stub
+		// send back to default handler
 		return false;
 	}
 
