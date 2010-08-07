@@ -1,5 +1,5 @@
 
-package com.makeramen.divisor;
+package com.makeramen.divisors;
 
 import android.graphics.Color;
 import android.view.View;
@@ -16,7 +16,7 @@ public class ListNumberBinder implements SimpleAdapter.ViewBinder {
 			if (data == NumberActivity.LABEL_PRIME) {
 				((TextView)view).setTextColor(Color.WHITE);
 			} else if (data == NumberActivity.LABEL_SPECIAL) {
-				((TextView)view).setTextColor(Color.BLUE);
+				((TextView)view).setTextColor(Color.RED);
 			} else {
 				((TextView)view).setTextColor(Color.GREEN);
 			}

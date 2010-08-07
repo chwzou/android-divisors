@@ -1,4 +1,4 @@
-package com.makeramen.divisor;
+package com.makeramen.divisors;
 
 import java.util.ArrayList;
 import java.util.HashMap;
