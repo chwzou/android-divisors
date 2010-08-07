@@ -25,6 +25,7 @@ public class NumberActivity extends Activity {
 	ProgressDialog progressDialog;
 	SharedPreferences prefs;
 	SimpleAdapter adapter;
+	ListNumberBinder mBinder;
 	ArrayList<HashMap<String, String>> divisors = new ArrayList<HashMap<String, String>>();
 	
 	/** Called when the activity is first created. */
@@ -35,6 +36,7 @@ public class NumberActivity extends Activity {
 		
 		text = (TextView) findViewById(R.id.text);
 		list = (ListView) findViewById(R.id.list);
+		mBinder = new ListNumberBinder();
 		
 		adapter = new SimpleAdapter(
 				this,
@@ -42,6 +44,8 @@ public class NumberActivity extends Activity {
 				R.layout.number_list_item,
 				new String[] {KEY_NUMBER, KEY_DESCRIPTION},
 				new int[] {android.R.id.text1, android.R.id.text2});
+		
+		adapter.setViewBinder(mBinder);
 		
 		new DivisorTask().execute();
 		
@@ -52,7 +56,6 @@ public class NumberActivity extends Activity {
 	private class DivisorTask extends AsyncTask<Void, Integer, Void> {
 
 		long startTime;
-		int count = 0;
 		int fcount;
 		HashMap<String, String> mMap;
 		
@@ -123,7 +126,6 @@ public class NumberActivity extends Activity {
 		@Override
 		protected void onPostExecute(Void result) {
 			text.append("\ntime elapsed(ms): " + (System.currentTimeMillis() - startTime));
-			text.append("\ntotal number of factors: " + count);
 			list.setAdapter(adapter);
 			progressDialog.dismiss();
 		}
