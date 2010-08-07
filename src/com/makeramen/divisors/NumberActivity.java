@@ -4,16 +4,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
-public class NumberActivity extends Activity {
+public class NumberActivity extends Activity implements ListView.OnItemClickListener {
 	
 	public static final String LABEL_DIVISORS = " divisors";
 	public static final String LABEL_PRIME = "prime number";
@@ -22,10 +23,9 @@ public class NumberActivity extends Activity {
 	public static final String KEY_DESCRIPTION = "description";
 	public static final String KEY_PREFS = "preferences";
 	
-	ListView list;
-	ProgressDialog progressDialog;
-	SharedPreferences prefs;
-	SimpleAdapter adapter;
+	ListView mListView;
+	SharedPreferences mPreferences;
+	SimpleAdapter mAdapter;
 	ListNumberBinder mBinder;
 	ArrayList<HashMap<String, String>> divisors = new ArrayList<HashMap<String, String>>();
 	
@@ -37,25 +37,34 @@ public class NumberActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_PROGRESS); // request progress bar access		
 		setContentView(R.layout.main);
 		
-		list = (ListView) findViewById(R.id.list);
+		mListView = (ListView) findViewById(R.id.list);
 		mBinder = new ListNumberBinder();
 		
-		adapter = new SimpleAdapter(
+		mAdapter = new SimpleAdapter(
 				this,
 				divisors,
 				R.layout.number_list_item,
 				new String[] {KEY_NUMBER, KEY_DESCRIPTION},
 				new int[] {android.R.id.text1, android.R.id.text2});
 		
-		adapter.setViewBinder(mBinder);
+		mAdapter.setViewBinder(mBinder);
 		
-		list.setAdapter(adapter);
+		mListView.setAdapter(mAdapter);
+		
+		mListView.setOnItemClickListener(this);
 		
 		new DivisorTask().execute();
 	}
-	
-	
-	//Thread for creating list of numbers and number of divisors
+
+
+	@Override
+	public void onItemClick(AdapterView<?> mList, View view, int position, long id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	/** Thread for creating list of numbers and number of divisors **/
 	private class DivisorTask extends AsyncTask<Void, Integer, Void> {
 
 		long startTime;
@@ -131,7 +140,7 @@ public class NumberActivity extends Activity {
 			if (progress[0] % 2 == 0) {
 				// update the listview when progress is even
 				// cuts down on UI updates and keeps things reasonable fast
-				adapter.notifyDataSetChanged();
+				mAdapter.notifyDataSetChanged();
 			}
 		}
 		
@@ -139,7 +148,7 @@ public class NumberActivity extends Activity {
 		protected void onPostExecute(Void result) {
 			Log.d("Divisors", "time elapsed: " + (System.currentTimeMillis() - startTime) + " ms");
 			
-			adapter.notifyDataSetChanged();
+			mAdapter.notifyDataSetChanged();
 			// fill the progressbar
 			setProgress(10000);
 			setTitle(R.string.app_name);
