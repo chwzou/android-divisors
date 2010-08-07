@@ -3,12 +3,13 @@ package com.makeramen.bumpy;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
 
 public class BumpyActivity extends Activity {
 	
-	TextView mTextView;
+	TextView text;
+	
+	int[] factors = new int[10000];
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -16,10 +17,7 @@ public class BumpyActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		
-		mTextView = (TextView) findViewById(R.id.text);
-		
-		// performance test
-		// currently takes almost 3 minutes...
+		text = (TextView) findViewById(R.id.text);
 		
 		new DivisorTask().execute();
 		
@@ -37,13 +35,22 @@ public class BumpyActivity extends Activity {
 		
 		@Override
 		protected Void doInBackground(Void... params) {
-			for (int i = 1; i <= 10000; i++) {
-				double s = Math.sqrt(i);
-				for (int j = 1; j <= s; j++) {
-					if (i%j==0)
-						count++;
-//					publishProgress(i, j);
+			for (int n = 1; n <= 10000; n++) {
+				
+				factors[n-1] = 0;
+				
+				double sq = Math.sqrt(n);
+				
+				for (int f = 1; f <= sq; f++) {
+					
+					if (n % f == 0) {
+						factors[n-1] += ((f == sq) ? 1 : 2); 
+					}
+					
 				}
+				
+				count += factors[n-1];
+				
 			}
 			
 			return null;
@@ -56,8 +63,8 @@ public class BumpyActivity extends Activity {
 		
 		@Override
 		protected void onPostExecute(Void result) {
-			Log.d("bumpy", "count: " + count*2);
-			Log.d("bumpy", "time elapsed(ms): " + (System.currentTimeMillis() - startTime) );
+			text.append("\ntime elapsed(ms): " + (System.currentTimeMillis() - startTime));
+			text.append("\ntotal number of factors: " + count);
 			
 		}
 	}
