@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.app.ListActivity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.view.View.OnKeyListener;
 import android.widget.AdapterView;
@@ -36,6 +36,7 @@ public class NumbersActivity extends ListActivity implements ListView.OnItemClic
 	ArrayList<HashMap<String, String>> mArrayList = new ArrayList<HashMap<String, String>>();
 	DivisorTask mThread;
 	Intent mIntent;
+	ProgressDialog progressDialog;
 	
 	
 	/** Called when the activity is first created. */
@@ -43,9 +44,6 @@ public class NumbersActivity extends ListActivity implements ListView.OnItemClic
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		// request progress bar access
-		requestWindowFeature(Window.FEATURE_PROGRESS);
-		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);		
 		setContentView(R.layout.main);
 		
 		mListView = (ListView) findViewById(android.R.id.list);
@@ -68,9 +66,13 @@ public class NumbersActivity extends ListActivity implements ListView.OnItemClic
 		
 		mAdapter.setViewBinder(mBinder);
 		
-		mListView.setAdapter(mAdapter);
-		
 		mListView.setOnItemClickListener(this);
+		
+		progressDialog = new ProgressDialog(this);
+		progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+		progressDialog.setMessage("Loading...");
+		progressDialog.setCancelable(false);
+		progressDialog.setMax(10000);
 
 		mThread = new DivisorTask();
 		mThread.execute();
@@ -142,7 +144,7 @@ public class NumbersActivity extends ListActivity implements ListView.OnItemClic
 			setTitle(R.string.loading_title);
 			setProgressBarVisibility(true);
 
-//			progressDialog.show();
+			progressDialog.show();
 			
 			// save start time for benchmarking
 			startTime = System.currentTimeMillis();
@@ -204,8 +206,8 @@ public class NumbersActivity extends ListActivity implements ListView.OnItemClic
 		protected void onProgressUpdate(Integer... progress) {
 			// UI update callback
 			setProgress(progress[0]);
-			mAdapter.notifyDataSetChanged();
-//			progressDialog.setProgress(progress[0]);
+//			mAdapter.notifyDataSetChanged();
+			progressDialog.setProgress(progress[0]);
 		}
 		
 		@Override
@@ -215,21 +217,21 @@ public class NumbersActivity extends ListActivity implements ListView.OnItemClic
 			Log.d("Divisors", "time elapsed: " + (System.currentTimeMillis() - startTime) + " ms");
 			
 			// update the list
-			mAdapter.notifyDataSetChanged();
-//			mListView.setAdapter(mAdapter);
+//			mAdapter.notifyDataSetChanged();
+			mListView.setAdapter(mAdapter);
 			
 			// fill and fade the progressbar
-			setProgress(10000);
-			setTitle(R.string.app_name);
+//			setProgress(10000);
+//			setTitle(R.string.app_name);
 			
-//			progressDialog.setProgress(10000);
-//			progressDialog.cancel();
+			progressDialog.setProgress(10000);
+			progressDialog.cancel();
 		}
 		
 		@Override
 		protected void onCancelled() {
 			Log.d("Divisors", "Thread cancelled");
-//			progressDialog.cancel();
+			progressDialog.cancel();
 		}
 	}
 	
