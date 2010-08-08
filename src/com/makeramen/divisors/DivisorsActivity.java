@@ -18,41 +18,51 @@ public class DivisorsActivity extends ListActivity implements ListView.OnItemCli
 		
 		setContentView(R.layout.divisors);
 		
-		int number = this.getIntent().getIntExtra(NumbersActivity.EXTRA_NUMBER, -1);
+		// get number passed from intent
+		int number = this.getIntent().getIntExtra(NumbersActivity.EXTRA_NUMBER, 1);
 		
-		ArrayList<Integer> divisors = new ArrayList<Integer>();
-		
+		// set title
 		this.setTitle("Divisors of " + number + ":");
 		
+		// arraylist to hold divisors
+		ArrayList<Integer> divisors = new ArrayList<Integer>();
+		
+		// hold sqrt of number
 		double sq = Math.sqrt(number);
 		
 		for (int f = 1; f <= sq; f++) {
 			//loop up to the square root
 			
 			if (number % f == 0) {
-				
+
+				// populate the arraylist with divisor
 				divisors.add(f);
 				
 				if (f != sq) {
+					// add conjugate(?) divisor to arraylist if divisor is not the sqrt
 					divisors.add(number/f);
 				}
 				
 			}
 		}
 		
+		// sort divisors
 		Collections.sort(divisors);
 		
-		ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_list_item_1, divisors);
+		// create arrayadapter to do handle arraylist 
+		ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(this, R.layout.divisor_list_item, divisors);		
 		
-		ListView mListView = (ListView) findViewById(android.R.id.list);		
-		
+		// set adapter to listview
+		ListView mListView = (ListView) findViewById(android.R.id.list);
 		mListView.setAdapter(adapter);
 		
+		// bind click listener to listview
 		mListView.setOnItemClickListener(this);
 	}
 	
 	@Override
 	public void onItemClick(AdapterView<?> list, View view, int position, long id) {
+		// if a number is clicked, set result code as clicked number
 		setResult((Integer) list.getAdapter().getItem(position));
 		this.finish();
 	}
