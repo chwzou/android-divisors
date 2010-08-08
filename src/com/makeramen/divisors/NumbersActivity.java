@@ -28,6 +28,8 @@ public class NumbersActivity extends Activity implements ListView.OnItemClickLis
 	SimpleAdapter mAdapter;
 	ListNumberBinder mBinder;
 	ArrayList<HashMap<String, String>> divisors = new ArrayList<HashMap<String, String>>();
+	DivisorTask mThread;
+	
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -55,7 +57,14 @@ public class NumbersActivity extends Activity implements ListView.OnItemClickLis
 		
 		mListView.setOnItemClickListener(this);
 		
-		new DivisorTask().execute();
+		mThread = new DivisorTask();
+		mThread.execute();
+	}
+	
+	@Override
+	public void onDestroy() {
+		mThread.cancel(true);
+		super.onDestroy();
 	}
 
 
@@ -161,6 +170,11 @@ public class NumbersActivity extends Activity implements ListView.OnItemClickLis
 			// fill and fade the progressbar
 			setProgress(10000);
 			setTitle(R.string.app_name);
+		}
+		
+		@Override
+		protected void onCancelled() {
+			Log.d("Divisors", "Thread cancelled");
 		}
 	}
 	
