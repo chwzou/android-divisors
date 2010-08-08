@@ -2,5 +2,5 @@
 <resources>
     <string name="hello">Hello World, NumberActivity!</string>
     <string name="app_name">Divisors</string>
-    <string name="loading_title">generating divisors...</string>
+    <string name="loading_title">Generating divisors...</string>
 </resources>

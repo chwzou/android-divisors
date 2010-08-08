@@ -14,7 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
-public class NumberActivity extends Activity implements ListView.OnItemClickListener {
+public class NumbersActivity extends Activity implements ListView.OnItemClickListener {
 	
 	public static final String LABEL_DIVISORS = " divisors";
 	public static final String LABEL_PRIME = "prime number";
@@ -34,7 +34,9 @@ public class NumberActivity extends Activity implements ListView.OnItemClickList
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		requestWindowFeature(Window.FEATURE_PROGRESS); // request progress bar access		
+		// request progress bar access
+		requestWindowFeature(Window.FEATURE_PROGRESS);
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);		
 		setContentView(R.layout.main);
 		
 		mListView = (ListView) findViewById(R.id.list);
@@ -73,8 +75,11 @@ public class NumberActivity extends Activity implements ListView.OnItemClickList
 		
 		@Override
 		protected void onPreExecute() {			
+			// begin progress bar
 			setTitle(R.string.loading_title);
 			setProgressBarVisibility(true);
+			
+			// save start time for benchmarking
 			startTime = System.currentTimeMillis();
 		}
 		
@@ -146,10 +151,14 @@ public class NumberActivity extends Activity implements ListView.OnItemClickList
 		
 		@Override
 		protected void onPostExecute(Void result) {
+			
+			// log 
 			Log.d("Divisors", "time elapsed: " + (System.currentTimeMillis() - startTime) + " ms");
 			
+			// update the list
 			mAdapter.notifyDataSetChanged();
-			// fill the progressbar
+			
+			// fill and fade the progressbar
 			setProgress(10000);
 			setTitle(R.string.app_name);
 		}

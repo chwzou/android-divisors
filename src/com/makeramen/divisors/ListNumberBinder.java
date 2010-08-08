@@ -13,11 +13,17 @@ public class ListNumberBinder implements SimpleAdapter.ViewBinder {
 			String textRepresentation) {
 		
 		if (view.getId() == android.R.id.text2) {
-			if (data == NumberActivity.LABEL_PRIME) {
+			if (data == NumbersActivity.LABEL_PRIME) {
+				
+				// text color for prime number
 				((TextView)view).setTextColor(Color.WHITE);
-			} else if (data == NumberActivity.LABEL_SPECIAL) {
-				((TextView)view).setTextColor(Color.RED);
+				
+			} else if (data == NumbersActivity.LABEL_SPECIAL) {
+				// text color for number 1
+				((TextView)view).setTextColor(Color.YELLOW);
 			} else {
+				
+				// text color for non-prime numbers
 				((TextView)view).setTextColor(Color.GREEN);
 			}
 		}
