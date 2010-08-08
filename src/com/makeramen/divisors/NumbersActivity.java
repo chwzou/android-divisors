@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -29,7 +29,7 @@ public class NumbersActivity extends Activity implements ListView.OnItemClickLis
 	ListNumberBinder mBinder;
 	ArrayList<HashMap<String, String>> divisors = new ArrayList<HashMap<String, String>>();
 	DivisorTask mThread;
-	
+	ProgressDialog progressDialog;
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -37,11 +37,11 @@ public class NumbersActivity extends Activity implements ListView.OnItemClickLis
 		super.onCreate(savedInstanceState);
 		
 		// request progress bar access
-		requestWindowFeature(Window.FEATURE_PROGRESS);
-		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);		
+//		requestWindowFeature(Window.FEATURE_PROGRESS);
+//		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);		
 		setContentView(R.layout.main);
 		
-		mListView = (ListView) findViewById(R.id.list);
+		mListView = (ListView) findViewById(android.R.id.list);
 		mBinder = new ListNumberBinder();
 		
 		mAdapter = new SimpleAdapter(
@@ -53,9 +53,14 @@ public class NumbersActivity extends Activity implements ListView.OnItemClickLis
 		
 		mAdapter.setViewBinder(mBinder);
 		
-		mListView.setAdapter(mAdapter);
-		
 		mListView.setOnItemClickListener(this);
+		
+
+		progressDialog = new ProgressDialog(this);
+		progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+		progressDialog.setMessage("Loading...");
+		progressDialog.setMax(10000);
+		progressDialog.setCancelable(false);
 		
 		mThread = new DivisorTask();
 		mThread.execute();
@@ -85,8 +90,10 @@ public class NumbersActivity extends Activity implements ListView.OnItemClickLis
 		@Override
 		protected void onPreExecute() {			
 			// begin progress bar
-			setTitle(R.string.loading_title);
-			setProgressBarVisibility(true);
+//			setTitle(R.string.loading_title);
+//			setProgressBarVisibility(true);
+
+			progressDialog.show();
 			
 			// save start time for benchmarking
 			startTime = System.currentTimeMillis();
@@ -141,21 +148,15 @@ public class NumbersActivity extends Activity implements ListView.OnItemClickLis
 					
 					time += 300;	// dont update ui thread for at least another 300ms
 				}
-
 			}
-			
 			return null;
 		}
 		
 		@Override
 		protected void onProgressUpdate(Integer... progress) {
 			// UI update callback
-			setProgress(progress[0]);
-			if (progress[0] % 2 == 0) {
-				// update the listview when progress is even
-				// cuts down on UI updates and keeps things reasonable fast
-				mAdapter.notifyDataSetChanged();
-			}
+//			setProgress(progress[0]);
+			progressDialog.setProgress(progress[0]);
 		}
 		
 		@Override
@@ -165,16 +166,20 @@ public class NumbersActivity extends Activity implements ListView.OnItemClickLis
 			Log.d("Divisors", "time elapsed: " + (System.currentTimeMillis() - startTime) + " ms");
 			
 			// update the list
-			mAdapter.notifyDataSetChanged();
+			mListView.setAdapter(mAdapter);
 			
 			// fill and fade the progressbar
-			setProgress(10000);
-			setTitle(R.string.app_name);
+//			setProgress(10000);
+//			setTitle(R.string.app_name);
+			
+			progressDialog.setProgress(10000);
+			progressDialog.cancel();
 		}
 		
 		@Override
 		protected void onCancelled() {
 			Log.d("Divisors", "Thread cancelled");
+			progressDialog.cancel();
 		}
 	}
 	
