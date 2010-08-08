@@ -5,22 +5,25 @@ import java.util.HashMap;
 
 import android.app.ListActivity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
+import android.view.View.OnKeyListener;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
-public class NumbersActivity extends ListActivity implements ListView.OnItemClickListener {
+public class NumbersActivity extends ListActivity implements ListView.OnItemClickListener, OnKeyListener {
 	
 	public static final String LABEL_DIVISORS = " divisors";
 	public static final String LABEL_PRIME = "prime number";
-	public static final String LABEL_SPECIAL = "special case";
+	public static final String LABEL_SPECIAL = "special number";
 	public static final String KEY_NUMBER = "number";
 	public static final String KEY_DESCRIPTION = "description";
 	public static final String EXTRA_NUMBER = "number";
@@ -28,13 +31,12 @@ public class NumbersActivity extends ListActivity implements ListView.OnItemClic
 	public static final int INTENT_CODE = 0;
 	
 	ListView mListView;
-	SharedPreferences mPreferences;
 	SimpleAdapter mAdapter;
 	ListNumberBinder mBinder;
 	ArrayList<HashMap<String, String>> mArrayList = new ArrayList<HashMap<String, String>>();
 	DivisorTask mThread;
-//	ProgressDialog progressDialog;
 	Intent mIntent;
+	
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -47,6 +49,14 @@ public class NumbersActivity extends ListActivity implements ListView.OnItemClic
 		setContentView(R.layout.main);
 		
 		mListView = (ListView) findViewById(android.R.id.list);
+		
+		// hide ime on start
+		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE |
+				WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+		
+		// bind onKey to EditText
+		findViewById(android.R.id.edit).setOnKeyListener(this);
+		
 		mBinder = new ListNumberBinder();
 		
 		mAdapter = new SimpleAdapter(
@@ -58,16 +68,10 @@ public class NumbersActivity extends ListActivity implements ListView.OnItemClic
 		
 		mAdapter.setViewBinder(mBinder);
 		
-		mListView.setOnItemClickListener(this);
-		
 		mListView.setAdapter(mAdapter);
-
-//		progressDialog = new ProgressDialog(this);
-//		progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-//		progressDialog.setMessage("Loading...");
-//		progressDialog.setMax(10000);
-//		progressDialog.setCancelable(false);
 		
+		mListView.setOnItemClickListener(this);
+
 		mThread = new DivisorTask();
 		mThread.execute();
 	}
@@ -76,6 +80,27 @@ public class NumbersActivity extends ListActivity implements ListView.OnItemClic
 	public void onDestroy() {
 		mThread.cancel(true);
 		super.onDestroy();
+	}
+	
+	public boolean onKey(View view, int keyCode, KeyEvent event) {
+
+		if (event.getAction() == KeyEvent.ACTION_DOWN) {
+			switch(keyCode) {
+			case KeyEvent.KEYCODE_ENTER:
+				try {
+					int i = Integer.parseInt(((EditText) view).getText().toString());
+					if ( 0 < i && i <=10000) {
+						mListView.setSelection(i-1);
+					} else {
+						((EditText) view).setText(null);
+					}
+				} catch (Exception e) {
+					((EditText) view).setText(null);
+				}
+			}
+		}
+
+		return false;
 	}
 
 	@Override
@@ -132,7 +157,7 @@ public class NumbersActivity extends ListActivity implements ListView.OnItemClic
 			mMap = new HashMap<String , String>();
 			mMap.put(KEY_NUMBER, "1");
 			
-			mMap.put(KEY_DESCRIPTION, "special case");
+			mMap.put(KEY_DESCRIPTION, LABEL_SPECIAL);
 			
 			mArrayList.add(mMap);
 			// END special case

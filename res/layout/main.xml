@@ -9,4 +9,20 @@
 		android:layout_height="0dip"
 		android:layout_weight="1"
 		android:fastScrollEnabled="true" />
+	<FrameLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:paddingTop="5dip"
+		android:paddingLeft="5dip"
+		android:paddingRight="5dip"
+		android:paddingBottom="0dip"
+		android:background="@drawable/bottombar_landscape_565" >
+		<EditText
+			android:id="@id/android:edit"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:hint="@string/search_hint" 
+			android:imeOptions="actionGo"
+			android:inputType="number" />
+	</FrameLayout>
 </LinearLayout>
