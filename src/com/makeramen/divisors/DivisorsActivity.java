@@ -19,7 +19,6 @@ public class DivisorsActivity extends ListActivity implements ListView.OnItemCli
 		setContentView(R.layout.divisors);
 		
 		int number = this.getIntent().getIntExtra(NumbersActivity.EXTRA_NUMBER, -1);
-//		divisors = this.getIntent().getIntExtra(NumbersActivity.EXTRA_DIVISORS, -1);
 		
 		ArrayList<Integer> divisors = new ArrayList<Integer>();
 		
