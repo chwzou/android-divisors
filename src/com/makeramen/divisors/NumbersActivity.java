@@ -1,6 +1,6 @@
 package com.makeramen.divisors;
 
-import android.app.ListActivity;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -10,19 +10,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.View.OnKeyListener;
-import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.ExpandableListView;
 
-public class NumbersActivity extends ListActivity implements ListView.OnItemClickListener, OnKeyListener {
+public class NumbersActivity extends Activity implements ExpandableListView.OnChildClickListener, OnKeyListener {
 	
 	public static final String EXTRA_NUMBER = "number";
 	public static final String EXTRA_DIVISORS = "divisors";
 	public static final int INTENT_DIVISORS = 0;
 	
-	ListView mListView;
-	NumberAdapter mAdapter;
+	ExpandableListView mListView;
+	ExpandableNumbersAdapter mAdapter;
 	Intent mIntent;
 	ProgressDialog progressDialog;
 	
@@ -33,7 +31,7 @@ public class NumbersActivity extends ListActivity implements ListView.OnItemClic
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.main);
-		mListView = (ListView) findViewById(android.R.id.list);
+		mListView = (ExpandableListView) findViewById(android.R.id.list);
 		
 		// hide ime on start
 		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE |
@@ -43,10 +41,9 @@ public class NumbersActivity extends ListActivity implements ListView.OnItemClic
 		findViewById(android.R.id.edit).setOnKeyListener(this);
 
 		// pass the NumberAdapter our LayoutInflater
-		mAdapter = new NumberAdapter((LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE)); 
+		mAdapter = new ExpandableNumbersAdapter((LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE)); 
 		
-		// bind onclicklistener to listview
-		mListView.setOnItemClickListener(this);
+		mListView.setOnChildClickListener(this);
 		
 		// bind adapter to listview
 		mListView.setAdapter(mAdapter);
@@ -63,7 +60,7 @@ public class NumbersActivity extends ListActivity implements ListView.OnItemClic
 					int i = Integer.parseInt(input.getText().toString());
 					if ( 0 < i && i <=10000) {
 						// if number is within range, jump to number
-						mListView.setSelection(i-1);
+						mListView.setSelectedGroup(i-1);
 					} else {
 						// if number is out of range, highlight red
 						input.setHighlightColor(Color.RED);
@@ -79,23 +76,6 @@ public class NumbersActivity extends ListActivity implements ListView.OnItemClic
 
 		return false;
 	}
-
-	@Override
-	public void onItemClick(AdapterView<?> list, View view, int position, long id) {
-		
-		// get the label of clicked textview
-		TextView mTextView = (TextView)view.findViewById(android.R.id.text2);
-		String label = mTextView.getText().toString();
-		
-		// if not prime or special, show divisors, kind of ghetto way to do it
-		if (label.substring(label.length() - NumberAdapter.LABEL_DIVISORS.length()).equals(NumberAdapter.LABEL_DIVISORS)) {
-			
-			// start activity, passing selected number
-			mIntent = new Intent(this, DivisorsActivity.class);
-			mIntent.putExtra(EXTRA_NUMBER, position + 1);
-			startActivityForResult(mIntent, INTENT_DIVISORS);
-		}
-	}
 	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -103,5 +83,12 @@ public class NumbersActivity extends ListActivity implements ListView.OnItemClic
 		if (resultCode != RESULT_CANCELED) {
 			mListView.setSelection(resultCode-1);
 		}
+	}
+
+	@Override
+	public boolean onChildClick(ExpandableListView parent, View v,
+			int groupPosition, int childPosition, long id) {
+		mListView.setSelectedGroup((int) id - 1);
+		return false;
 	}	
 }

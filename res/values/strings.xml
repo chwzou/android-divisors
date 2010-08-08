@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, NumberActivity!</string>
     <string name="app_name">Divisors</string>
-    <string name="loading_title">Loading...</string>
     <string name="search_hint">Jump To...</string>
 </resources>

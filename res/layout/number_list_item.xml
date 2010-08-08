@@ -3,7 +3,10 @@
 	android:layout_height="wrap_content"
 	android:layout_width="fill_parent"
 	android:orientation="horizontal"
-	android:padding="5dip">
+	android:paddingTop="5dip"
+	android:paddingBottom="5dip"
+	android:paddingLeft="40dip"
+	android:paddingRight="5dip">
 	<TextView 
 		android:id="@android:id/text1"
 		android:layout_height="wrap_content"
