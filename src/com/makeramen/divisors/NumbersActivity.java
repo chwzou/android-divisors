@@ -76,14 +76,6 @@ public class NumbersActivity extends Activity implements ExpandableListView.OnCh
 
 		return false;
 	}
-	
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// move listview to returned
-		if (resultCode != RESULT_CANCELED) {
-			mListView.setSelection(resultCode-1);
-		}
-	}
 
 	@Override
 	public boolean onChildClick(ExpandableListView parent, View v,

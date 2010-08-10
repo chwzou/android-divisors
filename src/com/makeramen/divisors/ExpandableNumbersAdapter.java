@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
-@SuppressWarnings("unchecked")
 public class ExpandableNumbersAdapter extends BaseExpandableListAdapter {
 	
 	public static final String LABEL_DIVISORS = " divisors";
@@ -26,13 +25,9 @@ public class ExpandableNumbersAdapter extends BaseExpandableListAdapter {
 		mInflater = inflater;
 	}
 	
-	public ArrayList<Integer> generateChildren(int number, ArrayList<Integer> list) {
-		// sanity check: list should always be null
-		if (list != null) {
-			return list;
-		}
-		
-		list = new ArrayList<Integer>();
+	public ArrayList<Integer> generateChildren(int number) {
+
+		ArrayList<Integer> list = new ArrayList<Integer>();
 		
 		double sq = Math.sqrt(number);
 		
@@ -65,7 +60,7 @@ public class ExpandableNumbersAdapter extends BaseExpandableListAdapter {
 	@Override
 	public Object getChild(int groupPosition, int childPosition) {
 		if (mArrayList[groupPosition] == null) {
-			mArrayList[groupPosition] = generateChildren(groupPosition + 1, mArrayList[groupPosition]);
+			mArrayList[groupPosition] = generateChildren(groupPosition + 1);
 		}
 		return mArrayList[groupPosition].get(childPosition);
 	}
@@ -100,7 +95,7 @@ public class ExpandableNumbersAdapter extends BaseExpandableListAdapter {
 	@Override
 	public int getChildrenCount(int groupPosition) {
 		if (mArrayList[groupPosition] == null) {
-			mArrayList[groupPosition] = generateChildren(groupPosition + 1, mArrayList[groupPosition]);
+			mArrayList[groupPosition] = generateChildren(groupPosition + 1);
 		}
 		
 		return mArrayList[groupPosition].size();
