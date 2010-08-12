@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Divisors</string>
-    <string name="search_hint">Jump To...</string>
+    <string name="search_hint">jump to...</string>
+    <string name="error_range">number must be between 1 and 10000</string>
 </resources>

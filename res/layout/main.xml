@@ -23,6 +23,9 @@
 			android:layout_height="wrap_content"
 			android:hint="@string/search_hint" 
 			android:imeOptions="actionGo"
-			android:inputType="number" />
+			android:inputType="number"
+			android:lines="1"
+			android:singleLine="true"
+			android:maxLength="5"/>
 	</FrameLayout>
 </LinearLayout>
