@@ -13,14 +13,14 @@ import android.view.View.OnKeyListener;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 
-public class NumbersActivity extends Activity implements ExpandableListView.OnChildClickListener, OnKeyListener {
+public class DivisorsActivity extends Activity implements ExpandableListView.OnChildClickListener, OnKeyListener {
 	
 	public static final String EXTRA_NUMBER = "number";
 	public static final String EXTRA_DIVISORS = "divisors";
 	public static final int INTENT_DIVISORS = 0;
 	
 	ExpandableListView mListView;
-	ExpandableNumbersAdapter mAdapter;
+	ExpandableDivisorsAdapter mAdapter;
 	Intent mIntent;
 	ProgressDialog progressDialog;
 	
@@ -41,7 +41,7 @@ public class NumbersActivity extends Activity implements ExpandableListView.OnCh
 		findViewById(android.R.id.edit).setOnKeyListener(this);
 
 		// pass the NumberAdapter our LayoutInflater
-		mAdapter = new ExpandableNumbersAdapter((LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE)); 
+		mAdapter = new ExpandableDivisorsAdapter((LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE)); 
 		
 		mListView.setOnChildClickListener(this);
 		

@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
-public class ExpandableNumbersAdapter extends BaseExpandableListAdapter {
+public class ExpandableDivisorsAdapter extends BaseExpandableListAdapter {
 	
 	public static final String LABEL_DIVISORS = " divisors";
 	public static final String LABEL_PRIME = "prime number";
@@ -20,7 +20,7 @@ public class ExpandableNumbersAdapter extends BaseExpandableListAdapter {
 	LayoutInflater mInflater;
 	ArrayList<Integer>[] mArrayList = new ArrayList[10000];
 	
-	public ExpandableNumbersAdapter(LayoutInflater inflater) {
+	public ExpandableDivisorsAdapter(LayoutInflater inflater) {
 		super();
 		mInflater = inflater;
 	}
